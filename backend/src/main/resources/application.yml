@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: newtonite-ops-backend
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:devpilot}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${DB_USERNAME:devpilot_user}
+    password: ${DB_PASSWORD:devpilot_pass}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    table: newtonite_schema_history
+    locations: classpath:db/migration
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+  seed:
+    enabled: ${SEED_DATA_ENABLED:true}
+  jwt:
+    secret: ${JWT_SECRET:newtonite-operations-under-pressure-super-secure-jwt-secret-key-32bytes-minimum}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
